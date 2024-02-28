@@ -45,7 +45,7 @@ def generate_random_word():
     global selected_language
     global timer
 
-    # Cancel the after loop if is set
+    # Cancel the after loop if is set so we only have on timer running!!!
     if timer:
         window.after_cancel(timer)
 
@@ -68,7 +68,7 @@ def generate_random_word():
         canvas.itemconfig(language_label_id, text=selected_language, fill=BLACK)
         canvas.itemconfig(word_label_id, text=english_word, fill=BLACK)
         # After 3 seconds, call 'flip_card' function
-        window.after(3000, flip_card, spanish_word)
+        timer = window.after(3000, flip_card, spanish_word)
     else: # Spanish language selected
         # Change texts in canvas
         canvas.itemconfig(language_label_id, text=selected_language, fill=BLACK)
