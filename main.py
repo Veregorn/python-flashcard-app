@@ -13,10 +13,8 @@ BLACK = "#000000"
 data = pandas.read_csv('data/en_es_words.csv')
 
 # Create an English-Spanish dictionary from the DataFrame
-data_dict = {row.english:row.spanish for (index, row) in data.iterrows()}
-
-# We need to separate keys from values too
-english_words_list = list(data_dict.keys())
+# data_dict = {row.english:row.spanish for (index, row) in data.iterrows()} # This is a way viewed in the NATO Alphabet Project. Let's try another one here to create a list of dictionaries
+to_learn = data.to_dict(orient="records")
 
 # Create a variable with the language selected by the random choice of HEADS_OR_TAILS
 selected_language = ""
@@ -24,27 +22,26 @@ selected_language = ""
 # ------------------------------------ GENERATE RANDOM ENGLISH WORDS ------------------------------------ #
 def generate_random_word():
     global selected_language
+
+    # Pick a random dict from our 'to_learn' list
+    random_word = choice(to_learn)
+
+    # Extract both words (English and Spanish)
+    english_word = random_word['english']
+    spanish_word = random_word['spanish']
     
     # Throw the coin to select a language
     selected_language = choice(HEADS_OR_TAILS)
 
     # Select a random word
     if selected_language == "English":
-        # Select a random english word to be our key
-        random_english_word = choice(english_words_list)
-        # So our value is...
-        equivalent_spanish_word = data_dict[random_english_word]
         # Change texts in canvas
         canvas.itemconfig(language_label_id, text=selected_language)
-        canvas.itemconfig(word_label_id, text=random_english_word)
+        canvas.itemconfig(word_label_id, text=english_word)
     else: # Spanish language selected
-        # Select a random english word to be our value
-        random_english_word = choice(english_words_list)
-        # So our value is...
-        equivalent_spanish_word = data_dict[random_english_word]
         # Change texts in canvas
         canvas.itemconfig(language_label_id, text=selected_language)
-        canvas.itemconfig(word_label_id, text=equivalent_spanish_word)
+        canvas.itemconfig(word_label_id, text=spanish_word)
 
 # ------------------------------------ UI SETUP ------------------------------------ #
 # Create the App window
